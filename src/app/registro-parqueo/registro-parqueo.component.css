@@ -1,0 +1,21 @@
+img.salida{
+    width: 19px; height: 19px;
+  }
+
+.titulo {
+  padding: 10px;
+}
+
+.contenedor-titulo {
+  text-align: center;
+  background-color: #CAD8F3
+}
+
+.contenedor-solicitud {
+  border-bottom-style: solid;
+  padding-bottom: 15px
+}
+
+.contenedor-vehiculos {
+  padding-top: 15px;
+}

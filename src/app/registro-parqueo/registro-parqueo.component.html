@@ -1,0 +1,92 @@
+<div>
+  <div class="contenedor-titulo col-md-12">
+    <h1 class="titulo">Estacionamiento</h1>
+  </div>
+
+  <div class="contenedor-solicitud col-md-12">
+    <h2>Solicitud de ingreso</h2>
+    <form class="form-inline">
+
+      <div class="form-group col-md-3 mb-2">
+        <label class="label-standard" style="padding-right: 5px">Placa *</label>
+        <input style="text-transform: uppercase" type="text" class="form-control" id="placa"
+          maxlength="6" name="placa" [(ngModel)]="solicitudIngreso.placa">
+      </div>
+
+      <div class="form-group col-md-3 mb-2">
+        <label class="label-standard" style="padding-right: 5px">Tipo de vehículo *</label>
+        <select name="tipoVehiculoCombo" class="form-control select-standard" id="tipoVehiculo" name="tipoVehiculo"
+          [(ngModel)]='solicitudIngreso.tipoVehiculo' (ngModelChange)="habilitarTipoMoto($event)" required>
+          <option *ngFor='let tipo of estacionamiento.tiposVehiculo' [value]="tipo">{{tipo}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-3 mb-2" *ngIf="esTipoMoto">
+        <input class="form-check-input" type="radio" name="esMotoAltoCilindraje" id="radioMotoLiviana" value="N"
+          [(ngModel)]="solicitudIngreso.esMotoAltoCilindraje" checked>
+        <label class="form-check-label" for="radioMotoLiviana" style="padding-right: 20px">
+          Moto liviana
+        </label>
+        <input class="form-check-input" type="radio" name="esMotoAltoCilindraje" id="radioMotoPesada" value="S"
+          [(ngModel)]="solicitudIngreso.esMotoAltoCilindraje">
+        <label class="form-check-label" for="radioMotoPesada">
+          Moto pesada
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary mb-2" (click)="solicitarIngreso()">Solicitar ingreso</button>
+
+    </form>
+  </div>
+
+  <div class="contenedor-vehiculos col-md-12">
+    <h2>Vehículos ingresados</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Tipo de vehículo</th>
+          <th>Fecha de ingreso</th>
+          <th>Proceso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehiculoIngresado of estacionamiento.vehiculosIngresados">
+          <td>{{vehiculoIngresado.placa}}</td>
+          <td>{{vehiculoIngresado.tipoVehiculo}}</td>
+          <td>{{vehiculoIngresado.fechaIngreso | date: 'dd/mm/yyyy HH:mm'}}</td>
+          <th><span class="link-mas" (click)="darSalidaModal(templateSalida)">
+              <img class="salida" src="assets/images/logout.png" alt="Salida"> Salida
+            </span></th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #templateSalida>
+  <div class="modal-header">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="cerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title"> Salida de vehículo </h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="cr-center">
+          <img src="resources/images/icon-info.png" alt="Información">
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="cr-question-modal">
+          <h4>Alguno de los descuentos ingresado es mayor al de la orden de compra desea continuar?</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-cr-other" data-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+    <button type="button" class="btn btn-cr-primary" (click)="salida(templateModalMessage)">Dar salida</button>
+  </div>
+</ng-template>
