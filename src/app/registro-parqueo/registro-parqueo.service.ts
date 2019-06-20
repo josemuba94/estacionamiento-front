@@ -27,6 +27,20 @@ export class RegistroParqueoService {
     );
   }
 
+  public sacarVehiculo(registroParqueo: RegistroParqueo): Observable<RegistroParqueo> {
+    return this.httpClient.put<RegistroParqueo>(environment.UrlsacarVehiculo, registroParqueo).pipe(
+      retry(1),
+      catchError(this.responseError)
+    );
+  }
+
+  public calcularSalida(placa: string): Observable<RegistroParqueo> {
+    return this.httpClient.get<RegistroParqueo>(environment.UrlcalcularSalida + placa).pipe(
+      retry(1),
+      catchError(this.responseError)
+    );
+  }
+
   public responseError(error) {
     let errorMessage = '';
     errorMessage = error.error.message;

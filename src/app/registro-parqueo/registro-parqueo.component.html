@@ -4,13 +4,13 @@
   </div>
 
   <div class="contenedor-solicitud col-md-12">
-    <h2>Solicitud de ingreso</h2>
+    <h3>Ingresar vehículo</h3>
     <form class="form-inline">
 
       <div class="form-group col-md-3 mb-2">
         <label class="label-standard" style="padding-right: 5px">Placa *</label>
-        <input style="text-transform: uppercase" type="text" class="form-control" id="placa"
-          maxlength="6" name="placa" [(ngModel)]="solicitudIngreso.placa">
+        <input style="text-transform: uppercase" type="text" class="form-control" id="placa" maxlength="6" name="placa"
+          [(ngModel)]="solicitudIngreso.placa">
       </div>
 
       <div class="form-group col-md-3 mb-2">
@@ -35,19 +35,31 @@
       </div>
 
       <button type="submit" class="btn btn-primary mb-2" (click)="solicitarIngreso()">Solicitar ingreso</button>
+    </form>
+  </div>
 
+  <div class="contenedor-solicitud col-md-12">
+    <h3>Sacar vehículo</h3>
+    <form class="form-inline">
+
+      <div class="form-group col-md-3 mb-2">
+        <label class="label-standard" style="padding-right: 5px">Placa *</label>
+        <input style="text-transform: uppercase" type="text" class="form-control" id="placaSalida" maxlength="6"
+          name="placaSalida" [(ngModel)]="placaSalida">
+      </div>
+
+      <button type="button" class="btn btn-success mb-2" (click)="calcularSalida(templateSalida)">Calcular</button>
     </form>
   </div>
 
   <div class="contenedor-vehiculos col-md-12">
-    <h2>Vehículos ingresados</h2>
+    <h3>Vehículos ingresados</h3>
     <table class="table">
       <thead>
         <tr>
           <th>Placa</th>
           <th>Tipo de vehículo</th>
           <th>Fecha de ingreso</th>
-          <th>Proceso</th>
         </tr>
       </thead>
       <tbody>
@@ -55,9 +67,6 @@
           <td>{{vehiculoIngresado.placa}}</td>
           <td>{{vehiculoIngresado.tipoVehiculo}}</td>
           <td>{{vehiculoIngresado.fechaIngreso | date: 'dd/mm/yyyy HH:mm'}}</td>
-          <th><span class="link-mas" (click)="darSalidaModal(templateSalida)">
-              <img class="salida" src="assets/images/logout.png" alt="Salida"> Salida
-            </span></th>
         </tr>
       </tbody>
     </table>
@@ -66,27 +75,22 @@
 
 <ng-template #templateSalida>
   <div class="modal-header">
+    <h3 style="font-size: 35px">Salida de vehículo</h3>
     <button type="button" class="close pull-right" aria-label="Close" (click)="cerrarModal()">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title"> Salida de vehículo </h4>
   </div>
+
   <div class="modal-body">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="cr-center">
-          <img src="resources/images/icon-info.png" alt="Información">
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div class="cr-question-modal">
-          <h4>Alguno de los descuentos ingresado es mayor al de la orden de compra desea continuar?</h4>
-        </div>
-      </div>
-    </div>
+    <p>Placa: {{registroParqueo.placa}}</p>
+    <p>Tipo de vehículo: {{registroParqueo.tipoVehiculo}}</p>
+    <p>Fecha de ingreso: {{registroParqueo.fechaIngreso | date: 'dd/mm/yyyy HH:mm'}}</p>
+    <p>Fecha de salida: {{registroParqueo.fechaSalida | date: 'dd/mm/yyyy HH:mm'}}</p>
+    <p style="font-size: 20px; font-weight: bold">Valor a pagar: ${{registroParqueo.valor}}</p>
   </div>
+
   <div class="modal-footer">
-    <button type="button" class="btn btn-cr-other" data-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-    <button type="button" class="btn btn-cr-primary" (click)="salida(templateModalMessage)">Dar salida</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cerrarModal()">Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="sacarVehiculo()">Sacar vehículo</button>
   </div>
 </ng-template>

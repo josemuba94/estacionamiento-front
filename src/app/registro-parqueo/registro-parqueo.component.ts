@@ -21,18 +21,20 @@ export class RegistroParqueoComponent implements OnInit {
   public solicitudIngreso: SolicitudIngreso;
   public registroParqueo: RegistroParqueo;
   public modalSalida: BsModalRef;
+  public placaSalida: string;
 
   constructor(private registroParqueoService: RegistroParqueoService, private modalService: BsModalService,
     private toastr: ToastrService) {
     this.solicitudIngreso = new SolicitudIngreso();
     this.cargarDatosIniciales();
-   }
+  }
 
   ngOnInit() {
     this.esTipoMoto = false;
   }
 
   private cargarDatosIniciales() {
+    this.registroParqueo = null;
     this.registroParqueoService.darVehiculosIngresados().subscribe(data => {
       this.estacionamiento = data;
     });
@@ -47,37 +49,60 @@ export class RegistroParqueoComponent implements OnInit {
     }
   }
 
-  darSalidaModal(template: TemplateRef<any>
-  ) {
-    this.modalSalida = this.modalService.show(template);
-  }
-
-  cerrarModal() {
-    this.modalSalida.hide();
-  }
-
   solicitarIngreso() {
-    this.validarSolicitud();
-    this.solicitudIngreso.fecha = new Date();
-    this.solicitudIngreso.placa = this.solicitudIngreso.placa.toUpperCase();
-    console.log(this.solicitudIngreso);
-    this.registroParqueoService.ingresarVehiculo(this.solicitudIngreso).subscribe(data => {
+    if (this.validarSolicitud()) {
+      this.solicitudIngreso.fecha = new Date();
+      this.solicitudIngreso.placa = this.solicitudIngreso.placa.toUpperCase();
+      this.registroParqueoService.ingresarVehiculo(this.solicitudIngreso).subscribe(data => {
+        this.registroParqueo = data;
+        this.toastr.success('El vehículo de placa ' + this.registroParqueo.placa +
+          ' se ha ingresado exitosamente.', '');
+        this.cargarDatosIniciales();
+      }, error => {
+        this.toastr.error(error, 'Se ha presentado un error');
+      });
+    }
+  }
+
+  validarSolicitud(): boolean {
+    if (this.solicitudIngreso.placa == null) {
+      this.toastr.error('Digite la placa del vehículo', 'Se ha presentado un error');
+      return false;
+    }
+    if (this.solicitudIngreso.tipoVehiculo == null) {
+      this.toastr.error('Seleccione el tipo de vehículo', 'Se ha presentado un error');
+      return false;
+    }
+    return true;
+  }
+
+  calcularSalida(template: TemplateRef<any>) {
+    if (this.placaSalida == null) {
+      this.toastr.error('Digite la placa del vehículo', 'Se ha presentado un error');
+    } else {
+      this.placaSalida = this.placaSalida.toUpperCase();
+      this.registroParqueoService.calcularSalida(this.placaSalida).subscribe(data => {
+        this.registroParqueo = data;
+        this.modalSalida = this.modalService.show(template);
+      }, error => {
+        this.toastr.error(error, 'Se ha presentado un error');
+      });
+    }
+  }
+
+  sacarVehiculo() {
+    this.registroParqueoService.sacarVehiculo(this.registroParqueo).subscribe(data => {
       this.registroParqueo = data;
       this.toastr.success('El vehículo de placa ' + this.registroParqueo.placa +
-        ' se ha ingresado exitosamente.', '');
+        ' se ha sacado exitosamente.', '');
+      this.cerrarModal();
       this.cargarDatosIniciales();
     }, error => {
       this.toastr.error(error, 'Se ha presentado un error');
     });
   }
 
-  validarSolicitud() {
-    if (this.solicitudIngreso.placa == null) {
-      this.toastr.error('Digite la placa del vehículo', 'Se ha presentado un error');
-    }
-    if (this.solicitudIngreso.tipoVehiculo == null) {
-      this.toastr.error('Seleccione el tipo de vehículo', 'Se ha presentado un error');
-    }
+  cerrarModal() {
+    this.modalSalida.hide();
   }
-
 }
