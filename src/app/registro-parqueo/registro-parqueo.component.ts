@@ -24,7 +24,7 @@ export class RegistroParqueoComponent implements OnInit {
   public placaSalida: string;
 
   constructor(private registroParqueoService: RegistroParqueoService, private modalService: BsModalService,
-    private toastr: ToastrService) {
+              private toastr: ToastrService) {
     this.solicitudIngreso = new SolicitudIngreso();
     this.cargarDatosIniciales();
   }
@@ -58,19 +58,21 @@ export class RegistroParqueoComponent implements OnInit {
         this.toastr.success('El vehículo de placa ' + this.registroParqueo.placa +
           ' se ha ingresado exitosamente.', '');
         this.cargarDatosIniciales();
+        this.solicitudIngreso.placa = null;
+        this.solicitudIngreso.tipoVehiculo = null;
       }, error => {
-        this.toastr.error(error, 'Se ha presentado un error');
+        this.toastr.warning(error, '');
       });
     }
   }
 
   validarSolicitud(): boolean {
     if (this.solicitudIngreso.placa == null) {
-      this.toastr.error('Digite la placa del vehículo', 'Se ha presentado un error');
+      this.toastr.error('Digite la placa del vehículo', 'Información incompleta');
       return false;
     }
     if (this.solicitudIngreso.tipoVehiculo == null) {
-      this.toastr.error('Seleccione el tipo de vehículo', 'Se ha presentado un error');
+      this.toastr.error('Seleccione el tipo de vehículo', 'Información incompleta');
       return false;
     }
     return true;
@@ -78,14 +80,14 @@ export class RegistroParqueoComponent implements OnInit {
 
   calcularSalida(template: TemplateRef<any>) {
     if (this.placaSalida == null) {
-      this.toastr.error('Digite la placa del vehículo', 'Se ha presentado un error');
+      this.toastr.error('Digite la placa del vehículo', 'Información incompleta');
     } else {
       this.placaSalida = this.placaSalida.toUpperCase();
       this.registroParqueoService.calcularSalida(this.placaSalida).subscribe(data => {
         this.registroParqueo = data;
         this.modalSalida = this.modalService.show(template);
       }, error => {
-        this.toastr.error(error, 'Se ha presentado un error');
+        this.toastr.warning(error, '');
       });
     }
   }
@@ -94,11 +96,12 @@ export class RegistroParqueoComponent implements OnInit {
     this.registroParqueoService.sacarVehiculo(this.registroParqueo).subscribe(data => {
       this.registroParqueo = data;
       this.toastr.success('El vehículo de placa ' + this.registroParqueo.placa +
-        ' se ha sacado exitosamente.', '');
+        ' ha salido exitosamente.', '');
       this.cerrarModal();
       this.cargarDatosIniciales();
+      this.placaSalida = null;
     }, error => {
-      this.toastr.error(error, 'Se ha presentado un error');
+      this.toastr.error(error, 'Error');
     });
   }
 

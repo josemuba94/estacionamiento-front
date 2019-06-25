@@ -1,5 +1,5 @@
 <div>
-  <div class="contenedor-titulo col-md-12">
+  <div class="contenedor-titulo col-xs-12">
     <h1 class="titulo">Estacionamiento</h1>
   </div>
 
@@ -34,7 +34,7 @@
         </label>
       </div>
 
-      <button type="submit" class="btn btn-primary mb-2" (click)="solicitarIngreso()">Solicitar ingreso</button>
+      <button type="submit" class="btn btn-primary mb-2" (click)="solicitarIngreso()" id="btnSolicitarIngreso">Solicitar ingreso</button>
     </form>
   </div>
 
@@ -48,7 +48,8 @@
           name="placaSalida" [(ngModel)]="placaSalida">
       </div>
 
-      <button type="button" class="btn btn-success mb-2" (click)="calcularSalida(templateSalida)">Calcular</button>
+      <button type="button" class="btn btn-success mb-2" (click)="calcularSalida(templateSalida)"
+       >Calcular</button>
     </form>
   </div>
 

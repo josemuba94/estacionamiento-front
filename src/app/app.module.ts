@@ -23,7 +23,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     ModalModule.forRoot(),
     FormsModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      preventDuplicates: true
+    }),
     BrowserAnimationsModule
   ],
   providers: [],
