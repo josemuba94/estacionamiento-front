@@ -17,7 +17,7 @@
         <label class="label-standard" style="padding-right: 5px">Tipo de vehículo *</label>
         <select name="tipoVehiculoCombo" class="form-control select-standard" id="tipoVehiculo" name="tipoVehiculo"
           [(ngModel)]='solicitudIngreso.tipoVehiculo' (ngModelChange)="habilitarTipoMoto($event)" required>
-          <option *ngFor='let tipo of estacionamiento.tiposVehiculo' [value]="tipo">{{tipo}}</option>
+          <option *ngFor='let tipo of estacionamiento.tiposVehiculo' [value]="tipo">{{getCapitalize(tipo)}}</option>
         </select>
       </div>
 
@@ -34,7 +34,8 @@
         </label>
       </div>
 
-      <button type="submit" class="btn btn-primary mb-2" (click)="solicitarIngreso()" id="btnSolicitarIngreso">Solicitar ingreso</button>
+      <button type="submit" class="btn btn-primary mb-2" (click)="solicitarIngreso()" id="btnSolicitarIngreso">Solicitar
+        ingreso</button>
     </form>
   </div>
 
@@ -48,8 +49,7 @@
           name="placaSalida" [(ngModel)]="placaSalida">
       </div>
 
-      <button type="button" class="btn btn-success mb-2" (click)="calcularSalida(templateSalida)"
-       >Calcular</button>
+      <button type="button" class="btn btn-success mb-2" (click)="calcularSalida(templateSalida)">Calcular</button>
     </form>
   </div>
 
@@ -66,8 +66,8 @@
       <tbody>
         <tr *ngFor="let vehiculoIngresado of estacionamiento.vehiculosIngresados">
           <td>{{vehiculoIngresado.placa}}</td>
-          <td>{{vehiculoIngresado.tipoVehiculo}}</td>
-          <td>{{vehiculoIngresado.fechaIngreso | date: 'dd/mm/yyyy HH:mm'}}</td>
+          <td>{{getCapitalize(vehiculoIngresado.tipoVehiculo)}}</td>
+          <td>{{vehiculoIngresado.fechaIngreso | date: 'dd/MM/yyyy HH:mm'}}</td>
         </tr>
       </tbody>
     </table>
@@ -84,9 +84,10 @@
 
   <div class="modal-body">
     <p>Placa: {{registroParqueo.placa}}</p>
-    <p>Tipo de vehículo: {{registroParqueo.tipoVehiculo}}</p>
-    <p>Fecha de ingreso: {{registroParqueo.fechaIngreso | date: 'dd/mm/yyyy HH:mm'}}</p>
-    <p>Fecha de salida: {{registroParqueo.fechaSalida | date: 'dd/mm/yyyy HH:mm'}}</p>
+    <p>Tipo de vehículo: {{getCapitalize(registroParqueo.tipoVehiculo)}}</p>
+    <p *ngIf="esTipoMotoModal">Tipo de moto: {{tipoMoto}}</p>
+    <p>Fecha de ingreso: {{registroParqueo.fechaIngreso | date: 'dd/MM/yyyy HH:mm'}}</p>
+    <p>Fecha de salida: {{registroParqueo.fechaSalida | date: 'dd/MM/yyyy HH:mm'}}</p>
     <p style="font-size: 20px; font-weight: bold">Valor a pagar: ${{registroParqueo.valor}}</p>
   </div>
 

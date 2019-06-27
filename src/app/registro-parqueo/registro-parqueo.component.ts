@@ -18,13 +18,15 @@ export class RegistroParqueoComponent implements OnInit {
 
   public estacionamiento: Estacionamiento;
   public esTipoMoto: boolean;
+  public esTipoMotoModal: boolean;
   public solicitudIngreso: SolicitudIngreso;
   public registroParqueo: RegistroParqueo;
   public modalSalida: BsModalRef;
   public placaSalida: string;
+  public tipoMoto: string;
 
   constructor(private registroParqueoService: RegistroParqueoService, private modalService: BsModalService,
-              private toastr: ToastrService) {
+    private toastr: ToastrService) {
     this.solicitudIngreso = new SolicitudIngreso();
     this.cargarDatosIniciales();
   }
@@ -85,6 +87,9 @@ export class RegistroParqueoComponent implements OnInit {
       this.placaSalida = this.placaSalida.toUpperCase();
       this.registroParqueoService.calcularSalida(this.placaSalida).subscribe(data => {
         this.registroParqueo = data;
+        this.registroParqueo.tipoVehiculo === 'MOTO' ? this.esTipoMotoModal = true : this.esTipoMotoModal = false;
+        this.registroParqueo.esMotoAltocilindraje ? this.tipoMoto = 'Pesada' : this.tipoMoto = 'Liviana';
+
         this.modalSalida = this.modalService.show(template);
       }, error => {
         this.toastr.warning(error, '');
@@ -107,5 +112,10 @@ export class RegistroParqueoComponent implements OnInit {
 
   cerrarModal() {
     this.modalSalida.hide();
+  }
+
+  getCapitalize(palabra: string) {
+    const minuscula = palabra.toLowerCase();
+    return minuscula.substring(0, 1).toUpperCase() + minuscula.substring(1);
   }
 }

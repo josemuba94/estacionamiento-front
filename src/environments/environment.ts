@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  UrldarEstado: 'http://localhost:8080/api/darEstado',
+  UrldarEstado: 'http://localhost:8080/api/obtenerEstacionamiento',
   UrlingresarVehiculo: 'http://localhost:8080/api/ingresarVehiculo',
   UrlcalcularSalida: 'http://localhost:8080/api/calcularSalida/',
   UrlsacarVehiculo: 'http://localhost:8080/api/sacarVehiculo'
